@@ -80,24 +80,28 @@ export function CarryMateLogo({
   }
 
   return (
-    <span
-      className={`inline-flex shrink-0 items-center ${sizeClass.gap} ${className}`.trim()}
-      aria-label={decorative ? undefined : "CarryMate"}
-    >
-      <LogoImage
-        src="/brand/carrymate-symbol.svg"
-        alt="CarryMate"
-        decorative
-        priority={priority}
-        className={sizeClass.symbol}
-      />
-      <LogoImage
-        src="/brand/carrymate-wordmark.svg"
-        alt="CarryMate"
-        decorative={decorative}
-        priority={priority}
-        className={sizeClass.wordmark}
-      />
+  <span
+    className={`inline-flex shrink-0 items-center ${sizeClass.gap} ${className}`.trim()}
+    aria-label={decorative ? undefined : "CarryMate"}
+  >
+    <LogoImage
+      src="/brand/carrymate-symbol.svg"
+      alt="CarryMate"
+      decorative
+      priority={priority}
+      className={sizeClass.symbol}
+    />
+    <LogoImage
+      src="/brand/carrymate-wordmark.svg"
+      alt="CarryMate"
+      decorative={decorative}
+      priority={priority}
+      className={sizeClass.wordmark}
+    />
+
+    <span className="rounded-full bg-black px-3 py-1 text-xs font-bold text-white">
+      TEST
     </span>
-  );
+  </span>
+);
 }
