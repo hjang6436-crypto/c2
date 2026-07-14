@@ -1,0 +1,384 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+html { background: #eef1f8; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(110, 94, 244, .10), transparent 28%),
+    radial-gradient(circle at 90% 8%, rgba(135, 187, 255, .10), transparent 24%),
+    linear-gradient(145deg, #f8f9fd 0%, #eef1f7 100%);
+  color: #24243a;
+  font-family: Pretendard, SUIT, Inter, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+}
+button, input, select, textarea { font: inherit; }
+button { -webkit-tap-highlight-color: transparent; }
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+
+.carrymate-header,
+.neu-bottom-nav {
+  border: 1px solid rgba(255,255,255,.82);
+  background: rgba(244,246,251,.9);
+  box-shadow: 14px 14px 30px rgba(167,174,199,.28), -12px -12px 28px rgba(255,255,255,.96);
+  backdrop-filter: blur(18px);
+}
+.neu-icon-button {
+  border: 1px solid rgba(255,255,255,.88);
+  background: #f3f5fa;
+  box-shadow: 7px 7px 15px rgba(165,172,197,.28), -7px -7px 15px rgba(255,255,255,.98);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.neu-icon-button:hover { transform: translateY(-2px); }
+.neu-icon-button:active { box-shadow: inset 4px 4px 8px rgba(165,172,197,.26), inset -4px -4px 8px rgba(255,255,255,.95); transform: none; }
+.neu-primary,
+.neu-ai-button {
+  border: 1px solid rgba(255,255,255,.28);
+  background: linear-gradient(145deg,#7668f5,#5148df);
+  box-shadow: 8px 8px 18px rgba(82,72,218,.30), -5px -5px 14px rgba(255,255,255,.75);
+}
+.neu-nav-active {
+  background: linear-gradient(145deg,#ece9ff,#f5f3ff);
+  box-shadow: inset 4px 4px 9px rgba(132,121,211,.16), inset -4px -4px 9px rgba(255,255,255,.95);
+}
+
+/* 기존 화면 전체를 하나의 Soft UI 시스템으로 통일 */
+.carrymate-workspace section[class*="rounded"],
+.carrymate-workspace div[class*="rounded"][class*="bg-white"] {
+  border-color: rgba(255,255,255,.8) !important;
+  background-color: rgba(246,247,252,.92) !important;
+  box-shadow: 10px 10px 24px rgba(166,173,198,.20), -9px -9px 22px rgba(255,255,255,.90) !important;
+}
+.carrymate-workspace section[class*="bg-gradient"] {
+  background: linear-gradient(135deg,#7769f6 0%,#594de4 62%,#4e45d8 100%) !important;
+  box-shadow: 14px 14px 30px rgba(78,69,216,.28), -8px -8px 22px rgba(255,255,255,.75) !important;
+}
+.carrymate-workspace input,
+.carrymate-workspace textarea,
+.carrymate-workspace select {
+  border-color: transparent !important;
+  background: #eef1f7 !important;
+  box-shadow: inset 5px 5px 10px rgba(168,175,198,.20), inset -5px -5px 10px rgba(255,255,255,.9) !important;
+}
+.carrymate-workspace input:focus,
+.carrymate-workspace textarea:focus,
+.carrymate-workspace select:focus {
+  outline: 2px solid rgba(98,89,232,.25);
+  outline-offset: 2px;
+}
+.carrymate-workspace button[class*="bg-white"] {
+  border-color: rgba(255,255,255,.82) !important;
+  background: #f5f6fb !important;
+  box-shadow: 6px 6px 13px rgba(166,173,198,.20), -6px -6px 13px rgba(255,255,255,.92) !important;
+}
+.carrymate-workspace button { transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease; }
+.carrymate-workspace button:hover { transform: translateY(-1px); }
+.carrymate-workspace button:active { transform: translateY(0); }
+
+@media (min-width: 1024px) {
+  .carrymate-header { position: sticky; top: 16px; z-index: 30; }
+  .carrymate-workspace > section { padding-bottom: 1rem; }
+}
+@media (max-width: 640px) {
+  .carrymate-header { border-radius: 24px; }
+  .neu-bottom-nav { border-radius: 22px; }
+}
+
+/* 2026-07 UI comfort pass: softer neumorphism and lower glare */
+.carrymate-header {
+  position: static !important;
+  top: auto !important;
+}
+
+.neu-primary,
+.neu-ai-button,
+.neu-primary-soft,
+.carrymate-workspace button[class*="bg-brand"],
+.carrymate-workspace button[class*="shadow-brand"] {
+  border: 1px solid rgba(255,255,255,.18) !important;
+  background: linear-gradient(145deg, #6b60e8 0%, #554bd2 100%) !important;
+  box-shadow: 7px 7px 15px rgba(69,61,169,.24), -4px -4px 10px rgba(255,255,255,.48) !important;
+  filter: saturate(.88);
+}
+.neu-primary:hover,
+.neu-ai-button:hover,
+.neu-primary-soft:hover { filter: saturate(.94) brightness(1.01); }
+.neu-primary:active,
+.neu-ai-button:active,
+.neu-primary-soft:active {
+  box-shadow: inset 4px 4px 9px rgba(52,46,132,.28), inset -3px -3px 8px rgba(255,255,255,.18) !important;
+}
+
+.onboarding-neu > section {
+  border-color: rgba(216,221,235,.9) !important;
+  background: #eef1f7 !important;
+  box-shadow: 12px 12px 28px rgba(157,165,190,.24), -10px -10px 24px rgba(255,255,255,.82) !important;
+}
+.onboarding-neu > section > div:first-child,
+.onboarding-neu [class*="bg-white"] {
+  border-color: rgba(219,223,235,.9) !important;
+  background: #f4f5f9 !important;
+  box-shadow: 7px 7px 16px rgba(164,171,194,.20), -7px -7px 16px rgba(255,255,255,.75) !important;
+}
+.onboarding-neu [class*="bg-canvas"] {
+  background: #e9edf5 !important;
+  box-shadow: inset 4px 4px 9px rgba(165,173,197,.20), inset -4px -4px 9px rgba(255,255,255,.68) !important;
+}
+
+.modal-neu-overlay {
+  background: rgba(36, 40, 58, .28) !important;
+  backdrop-filter: blur(5px);
+}
+.modal-neu-panel {
+  border: 1px solid rgba(219,223,235,.95);
+  background: #eef1f7;
+  box-shadow: 16px 16px 38px rgba(43,48,67,.24), -9px -9px 24px rgba(255,255,255,.55) !important;
+}
+.modal-neu-header {
+  border-bottom: 1px solid rgba(205,211,228,.82);
+  background: rgba(241,243,248,.96);
+}
+.modal-neu-body { background: #eef1f7; }
+.modal-neu-close {
+  border: 1px solid rgba(255,255,255,.58);
+  background: #e7ebf3;
+  box-shadow: 5px 5px 11px rgba(164,172,196,.22), -5px -5px 11px rgba(255,255,255,.72);
+}
+.modal-neu-panel .neu-field,
+.modal-neu-panel input,
+.modal-neu-panel textarea,
+.modal-neu-panel select {
+  border: 1px solid rgba(210,216,231,.86) !important;
+  background: #edf0f6 !important;
+  box-shadow: inset 4px 4px 9px rgba(165,173,197,.18), inset -4px -4px 9px rgba(255,255,255,.72) !important;
+}
+.modal-neu-panel input:focus,
+.modal-neu-panel textarea:focus,
+.modal-neu-panel select:focus {
+  border-color: rgba(92,82,210,.35) !important;
+  outline: 2px solid rgba(92,82,210,.12) !important;
+  outline-offset: 2px;
+}
+.modal-neu-panel [class*="bg-canvas"] {
+  background: #e7ebf3 !important;
+  box-shadow: inset 4px 4px 9px rgba(165,173,197,.16), inset -4px -4px 9px rgba(255,255,255,.64);
+}
+.modal-neu-panel button[class*="bg-white"] {
+  border-color: rgba(218,223,236,.9) !important;
+  background: #f1f3f8 !important;
+  box-shadow: 5px 5px 11px rgba(164,172,196,.18), -5px -5px 11px rgba(255,255,255,.68) !important;
+}
+
+@media (max-width: 767px) {
+  .carrymate-workspace { padding-bottom: 2rem !important; }
+  .carrymate-header nav { position: static; }
+}
+/* =========================================================
+   Auth / Modal brightness comfort adjustment
+   ========================================================= */
+
+/* 보라색 주요 버튼 공통 */
+.neu-primary-soft,
+.neu-primary,
+.neu-ai-button,
+.modal-neu-panel button[class*="bg-brand"],
+.modal-neu-panel button[class*="shadow-brand"],
+.onboarding-neu button[class*="bg-brand"],
+.onboarding-neu button[class*="shadow-brand"] {
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  background: linear-gradient(
+    145deg,
+    #6a61dc 0%,
+    #5b52cf 55%,
+    #5048bd 100%
+  ) !important;
+
+  box-shadow:
+    6px 7px 15px rgba(72, 65, 160, 0.23),
+    -3px -3px 8px rgba(255, 255, 255, 0.34) !important;
+
+  filter: saturate(0.8) brightness(0.97);
+  color: #ffffff !important;
+}
+
+/* 회원가입 버튼을 새 팀 만들기와 같은 밝기로 */
+.onboarding-neu button[class*="bg-brand"] {
+  background: linear-gradient(
+    145deg,
+    #6a61dc 0%,
+    #5b52cf 55%,
+    #5048bd 100%
+  ) !important;
+
+  box-shadow:
+    6px 7px 15px rgba(72, 65, 160, 0.23),
+    -3px -3px 8px rgba(255, 255, 255, 0.34) !important;
+
+  filter: saturate(0.8) brightness(0.97);
+}
+
+/* 보라색 버튼 hover */
+.neu-primary-soft:hover,
+.neu-primary:hover,
+.neu-ai-button:hover,
+.modal-neu-panel button[class*="bg-brand"]:hover,
+.onboarding-neu button[class*="bg-brand"]:hover {
+  filter: saturate(0.84) brightness(1);
+  transform: translateY(-1px);
+}
+
+/* 보라색 버튼 클릭 */
+.neu-primary-soft:active,
+.neu-primary:active,
+.neu-ai-button:active,
+.modal-neu-panel button[class*="bg-brand"]:active,
+.onboarding-neu button[class*="bg-brand"]:active {
+  filter: saturate(0.76) brightness(0.94);
+
+  box-shadow:
+    inset 4px 4px 9px rgba(47, 42, 113, 0.3),
+    inset -3px -3px 7px rgba(255, 255, 255, 0.12) !important;
+
+  transform: none;
+}
+
+/* 로그인 / 회원가입 선택 영역 */
+.modal-neu-panel .grid.grid-cols-2 {
+  border: 1px solid rgba(209, 215, 229, 0.8);
+  background: #e4e8f1 !important;
+
+  box-shadow:
+    inset 4px 4px 9px rgba(158, 166, 190, 0.18),
+    inset -4px -4px 9px rgba(255, 255, 255, 0.56);
+}
+
+/* 선택된 로그인 / 회원가입 탭 */
+.modal-neu-panel .grid.grid-cols-2 button[class*="bg-white"] {
+  border: 1px solid rgba(217, 222, 235, 0.85) !important;
+  background: #eef0f5 !important;
+
+  box-shadow:
+    4px 4px 9px rgba(158, 166, 190, 0.18),
+    -4px -4px 9px rgba(255, 255, 255, 0.62) !important;
+}
+
+/* 선택되지 않은 탭 */
+.modal-neu-panel .grid.grid-cols-2 button:not([class*="bg-white"]) {
+  color: #74788c !important;
+}
+
+/* 팝업 전체 배경 */
+.modal-neu-overlay {
+  background: rgba(35, 39, 55, 0.35) !important;
+  backdrop-filter: blur(6px);
+}
+
+/* 로그인, 회원가입, 새 팀 만들기 등 팝업 카드 */
+.modal-neu-panel {
+  border: 1px solid rgba(211, 217, 231, 0.92) !important;
+  background: #e9ecf3 !important;
+
+  box-shadow:
+    15px 16px 36px rgba(39, 43, 61, 0.25),
+    -7px -7px 20px rgba(255, 255, 255, 0.42) !important;
+}
+
+/* 팝업 상단 */
+.modal-neu-header {
+  border-bottom: 1px solid rgba(197, 204, 221, 0.8) !important;
+  background: #eceff5 !important;
+}
+
+/* 팝업 내용 */
+.modal-neu-body {
+  background: #e9ecf3 !important;
+}
+
+/* 닫기 버튼 */
+.modal-neu-close {
+  border: 1px solid rgba(211, 216, 229, 0.85) !important;
+  background: #e2e6ef !important;
+  color: #6e7285 !important;
+
+  box-shadow:
+    4px 4px 9px rgba(153, 162, 187, 0.2),
+    -4px -4px 9px rgba(255, 255, 255, 0.58) !important;
+}
+
+.modal-neu-close:active {
+  box-shadow:
+    inset 3px 3px 7px rgba(153, 162, 187, 0.22),
+    inset -3px -3px 7px rgba(255, 255, 255, 0.48) !important;
+}
+
+/* 로그인, 회원가입, 새 팀 만들기 입력창 */
+.modal-neu-panel .neu-field,
+.modal-neu-panel input,
+.modal-neu-panel textarea,
+.modal-neu-panel select {
+  border: 1px solid rgba(199, 207, 225, 0.82) !important;
+  background: #e6eaf2 !important;
+  color: #303348 !important;
+
+  box-shadow:
+    inset 4px 4px 9px rgba(148, 157, 183, 0.18),
+    inset -4px -4px 9px rgba(255, 255, 255, 0.52) !important;
+}
+
+.modal-neu-panel input::placeholder,
+.modal-neu-panel textarea::placeholder {
+  color: #9298a9 !important;
+  opacity: 1;
+}
+
+.modal-neu-panel input:focus,
+.modal-neu-panel textarea:focus,
+.modal-neu-panel select:focus {
+  border-color: rgba(86, 77, 190, 0.42) !important;
+  outline: 2px solid rgba(86, 77, 190, 0.1) !important;
+  outline-offset: 1px;
+}
+
+/* 오류, 안내 메시지 박스 */
+.modal-neu-panel [class*="bg-canvas"] {
+  border: 1px solid rgba(203, 210, 226, 0.72);
+  background: #e1e6ef !important;
+
+  box-shadow:
+    inset 4px 4px 8px rgba(150, 159, 184, 0.16),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.45) !important;
+}
+
+/* 팝업 내부 일반 흰색 버튼 */
+.modal-neu-panel button[class*="bg-white"] {
+  border: 1px solid rgba(207, 213, 228, 0.85) !important;
+  background: #eceff5 !important;
+  color: #34374b !important;
+
+  box-shadow:
+    4px 4px 10px rgba(153, 162, 187, 0.18),
+    -4px -4px 10px rgba(255, 255, 255, 0.52) !important;
+}
+
+/* 온보딩 로그인 / 회원가입 영역 */
+.onboarding-neu [class*="bg-canvas"] {
+  border: 1px solid rgba(207, 214, 229, 0.8) !important;
+  background: #e3e7f0 !important;
+
+  box-shadow:
+    inset 4px 4px 9px rgba(151, 160, 184, 0.18),
+    inset -4px -4px 9px rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 온보딩 로그인 버튼 */
+.onboarding-neu button[class*="bg-white"] {
+  border: 1px solid rgba(207, 213, 228, 0.85) !important;
+  background: #eceff5 !important;
+
+  box-shadow:
+    4px 4px 9px rgba(153, 162, 187, 0.18),
+    -4px -4px 9px rgba(255, 255, 255, 0.52) !important;
+}

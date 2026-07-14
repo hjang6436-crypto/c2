@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CarryMate Guestbook</title>
+  <style>
+    :root {
+      --bg: #eef2f7;
+      --bg-strong: #e3ebf8;
+      --surface: rgba(255, 255, 255, 0.92);
+      --surface-solid: #ffffff;
+      --line: #d9e2f1;
+      --text: #0f172a;
+      --muted: #64748b;
+      --brand: #1e70e6;
+      --brand-deep: #1759b8;
+      --brand-soft: #e8f0ff;
+      --danger: #dc2626;
+      --success: #0f9f6e;
+      --shadow: 0 24px 60px rgba(15, 23, 42, 0.09);
+      --shadow-soft: 0 10px 30px rgba(30, 112, 230, 0.10);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(30, 112, 230, 0.16), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.14), transparent 22%),
+        linear-gradient(135deg, #f7faff 0%, var(--bg) 46%, #e7eef8 100%);
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 28px 22px;
+      border-right: 1px solid rgba(217, 226, 241, 0.9);
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 30px;
+    }
+
+    .brand-mark,
+    .avatar {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--brand), #4a8df0);
+      color: #fff;
+      font-weight: 900;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .eyebrow {
+      margin: 0 0 4px;
+      color: var(--brand);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand-title,
+    .page-title {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    .nav {
+      display: grid;
+      gap: 10px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 22px;
+      color: var(--muted);
+      background: transparent;
+      border: 0;
+      text-align: left;
+      font-weight: 800;
+    }
+
+    .nav-item.active {
+      background: linear-gradient(135deg, var(--brand), #4d90f1);
+      color: #fff;
+      box-shadow: 0 18px 40px rgba(30, 112, 230, 0.20);
+    }
+
+    .nav-icon {
+      width: 24px;
+      text-align: center;
+      opacity: 0.9;
+    }
+
+    .content {
+      min-width: 0;
+      padding: 24px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 18px 24px;
+      border: 1px solid rgba(217, 226, 241, 0.9);
+      border-radius: var(--radius-xl);
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pill,
+    .icon-button {
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(248, 250, 252, 0.92);
+    }
+
+    .pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      min-width: 250px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .icon-button {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-weight: 900;
+    }
+
+    .dashboard {
+      display: grid;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.95fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid rgba(217, 226, 241, 0.96);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .card-pad {
+      padding: 24px;
+    }
+
+    .hero-panel {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(30, 112, 230, 0.10), rgba(255, 255, 255, 0.88)),
+        var(--surface);
+    }
+
+    .hero-panel::after {
+      content: "";
+      position: absolute;
+      right: -80px;
+      top: -80px;
+      width: 220px;
+      height: 220px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(30, 112, 230, 0.18), transparent 66%);
+    }
+
+    .section-label {
+      margin: 0;
+      color: var(--brand);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      max-width: 16ch;
+      margin: 10px 0 12px;
+      font-size: 38px;
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-copy {
+      max-width: 56ch;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 600;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .meta-chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .stat-card {
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid var(--line);
+    }
+
+    .stat-label {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .stat-value {
+      margin: 10px 0 0;
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .status-card {
+      display: grid;
+      gap: 14px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 9px 13px;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .status-list,
+    .guestbook-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .status-item,
+    .message-item {
+      padding: 16px 18px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(248, 250, 252, 0.92);
+    }
+
+    .message-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      gap: 20px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .field-label {
+      display: block;
+      margin: 0 0 8px;
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    .input,
+    .textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 14px 16px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .input:focus,
+    .textarea:focus {
+      border-color: rgba(30, 112, 230, 0.7);
+      box-shadow: 0 0 0 4px rgba(30, 112, 230, 0.10);
+    }
+
+    .textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .button-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .button {
+      border: 0;
+      border-radius: 18px;
+      padding: 14px 18px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 0.16s ease, background-color 0.16s ease, opacity 0.16s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+      transform: none;
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, var(--brand), #4e91f1);
+      color: #fff;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .button.secondary {
+      background: #fff;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .helper {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      font-weight: 700;
+    }
+
+    .notice {
+      padding: 14px 16px;
+      border-radius: 18px;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .notice.info {
+      background: #f8fbff;
+      color: #285ea8;
+      border: 1px solid #d8e7ff;
+    }
+
+    .notice.success {
+      background: #ecfdf5;
+      color: var(--success);
+      border: 1px solid #b7efcf;
+    }
+
+    .notice.error {
+      background: #fef2f2;
+      color: var(--danger);
+      border: 1px solid #fecaca;
+    }
+
+    .message-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .message-name {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .message-time {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .message-body {
+      margin: 0;
+      color: #334155;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-weight: 600;
+    }
+
+    .empty {
+      padding: 26px 20px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: 24px;
+      background: rgba(248, 250, 252, 0.84);
+      font-weight: 700;
+    }
+
+    .setup-box {
+      margin-top: 14px;
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 22px;
+      border: 1px dashed var(--line);
+      background: rgba(248, 250, 252, 0.84);
+    }
+
+    .footer-note {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1180px) {
+      .hero,
+      .message-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+        padding-bottom: 16px;
+        border-right: 0;
+        border-bottom: 1px solid rgba(217, 226, 241, 0.9);
+      }
+
+      .nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .content {
+        padding: 14px;
+      }
+
+      .topbar {
+        padding: 16px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .topbar-right,
+      .button-row,
+      .stats {
+        width: 100%;
+      }
+
+      .pill {
+        min-width: 0;
+        flex: 1;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand-row">
+        <div class="brand-mark">C</div>
+        <div>
+          <p class="eyebrow">CarryMate</p>
+          <h1 class="brand-title">AI 팀플 코치</h1>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="CarryMate 메뉴">
+        <button class="nav-item active" type="button"><span class="nav-icon">⌂</span>홈</button>
+        <button class="nav-item" type="button"><span class="nav-icon">✓</span>업무</button>
+        <button class="nav-item" type="button"><span class="nav-icon">◴</span>AI 일정</button>
+        <button class="nav-item" type="button"><span class="nav-icon">▣</span>파일</button>
+        <button class="nav-item" type="button"><span class="nav-icon">✉</span>질문/공지</button>
+        <button class="nav-item" type="button"><span class="nav-icon">▤</span>투표</button>
+        <button class="nav-item" type="button"><span class="nav-icon">!</span>위험도</button>
+      </nav>
+    </aside>
+
+    <div class="content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Dashboard</p>
+          <h2 class="page-title">신입생 팀 프로젝트 관리</h2>
+          <p class="subtitle">팀원 모집용 공개 방명록으로 질문과 참여 의사를 간단히 모아보세요.</p>
+        </div>
+        <div class="topbar-right">
+          <div class="pill">검색 대신 이 방명록은 실시간으로 최신 메시지를 불러옵니다.</div>
+          <button class="icon-button" type="button" aria-label="알림">🔔</button>
+          <div class="avatar" aria-hidden="true">장</div>
+        </div>
+      </header>
+
+      <main class="dashboard">
+        <section class="hero">
+          <article class="card card-pad hero-panel">
+            <p class="section-label">Team Recruiting</p>
+            <h3 class="hero-title">CarryMate 팀원 모집 방명록</h3>
+            <p class="hero-copy">
+              이름과 한마디를 남기면 Supabase에 저장되고, 같은 페이지에서 바로 목록으로 확인할 수 있습니다.
+              발표 시연용으로 구성해 두었고, 루트 <code>index.html</code> 한 장만으로 동작합니다.
+            </p>
+            <div class="hero-meta">
+              <span class="meta-chip">실시간 DB 연결 준비</span>
+              <span class="meta-chip">익명 읽기/쓰기 정책 기준</span>
+              <span class="meta-chip">단일 정적 파일 배포 대응</span>
+            </div>
+            <div class="stats">
+              <div class="stat-card">
+                <p class="stat-label">현재 메시지 수</p>
+                <p class="stat-value" id="messageCount">0</p>
+              </div>
+              <div class="stat-card">
+                <p class="stat-label">연결 상태</p>
+                <p class="stat-value" id="connectionState">대기</p>
+              </div>
+              <div class="stat-card">
+                <p class="stat-label">테이블 이름</p>
+                <p class="stat-value" style="font-size: 20px;">guestbook</p>
+              </div>
+            </div>
+          </article>
+
+          <aside class="card card-pad status-card">
+            <span class="badge">CarryMate 모집 운영 체크</span>
+            <div class="status-list">
+              <div class="status-item">1. 익명 사용자도 메시지를 읽고 남길 수 있도록 RLS 정책 기준으로 설계했습니다.</div>
+              <div class="status-item">2. Supabase URL과 퍼블리셔블 키를 저장하면 새로고침 후에도 브라우저에 유지됩니다.</div>
+              <div class="status-item">3. 목록은 최신 메시지 순으로 갱신되며, 실패 시 원인을 화면에 바로 표시합니다.</div>
+            </div>
+            <p class="footer-note">실서버 연결값만 채우면 강사님 요구 조건에 맞춰 바로 시연 가능합니다.</p>
+          </aside>
+        </section>
+
+        <section class="message-grid">
+          <section class="card card-pad">
+            <p class="section-label">Write</p>
+            <h3 style="margin: 10px 0 10px; font-size: 28px; letter-spacing: -0.03em;">팀원 모집 메시지 남기기</h3>
+            <p class="helper">
+              이름과 메시지를 입력하면 <code>carrymate_guestbook</code> 테이블에 저장됩니다.
+            </p>
+
+            <div id="configNotice" class="notice info" style="margin-top: 16px;">
+              Supabase URL과 퍼블리셔블 키가 아직 설정되지 않았습니다. 아래 입력란에 한 번만 저장해 주세요.
+            </div>
+
+            <div class="setup-box">
+              <label>
+                <span class="field-label">Supabase Project URL</span>
+                <input id="supabaseUrlInput" class="input" type="url" placeholder="https://YOUR_PROJECT.supabase.co">
+              </label>
+              <label>
+                <span class="field-label">Supabase Publishable Key / anon key</span>
+                <input id="supabaseKeyInput" class="input" type="text" placeholder="sb_publishable_... 또는 legacy anon key">
+              </label>
+              <div class="button-row">
+                <p class="helper">브라우저의 <code>localStorage</code>에만 저장됩니다.</p>
+                <button id="saveConfigButton" class="button secondary" type="button">연결 정보 저장</button>
+              </div>
+            </div>
+
+            <form id="guestbookForm" class="form-grid" style="margin-top: 18px;">
+              <label>
+                <span class="field-label">이름</span>
+                <input id="nameInput" class="input" name="name" maxlength="30" placeholder="예: 김민지" required>
+              </label>
+              <label>
+                <span class="field-label">메시지</span>
+                <textarea id="messageInput" class="textarea" name="message" maxlength="300" placeholder="예: 프론트엔드 맡고 싶어요. 피그마와 리액트 경험 있습니다." required></textarea>
+              </label>
+              <div class="button-row">
+                <p class="helper">최대 30자 이름, 최대 300자 메시지</p>
+                <button id="submitButton" class="button primary" type="submit">방명록 남기기</button>
+              </div>
+            </form>
+
+            <div id="feedback" class="notice info" style="margin-top: 16px; display: none;"></div>
+          </section>
+
+          <section class="card card-pad">
+            <p class="section-label">Guestbook</p>
+            <h3 style="margin: 10px 0 10px; font-size: 28px; letter-spacing: -0.03em;">남겨진 메시지</h3>
+            <p class="helper" id="listHelper">아직 메시지를 불러오지 않았습니다.</p>
+            <div style="margin-top: 18px; display: flex; justify-content: space-between; gap: 12px;">
+              <button id="refreshButton" class="button secondary" type="button">목록 새로고침</button>
+            </div>
+            <div id="guestbookList" class="guestbook-list" style="margin-top: 18px;">
+              <div class="empty">연결 후 메시지 목록이 여기에 표시됩니다.</div>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const STORAGE_KEYS = {
+      url: "carrymate.supabase.url",
+      key: "carrymate.supabase.key",
+    };
+
+    const elements = {
+      supabaseUrlInput: document.getElementById("supabaseUrlInput"),
+      supabaseKeyInput: document.getElementById("supabaseKeyInput"),
+      saveConfigButton: document.getElementById("saveConfigButton"),
+      guestbookForm: document.getElementById("guestbookForm"),
+      nameInput: document.getElementById("nameInput"),
+      messageInput: document.getElementById("messageInput"),
+      submitButton: document.getElementById("submitButton"),
+      refreshButton: document.getElementById("refreshButton"),
+      feedback: document.getElementById("feedback"),
+      guestbookList: document.getElementById("guestbookList"),
+      messageCount: document.getElementById("messageCount"),
+      connectionState: document.getElementById("connectionState"),
+      configNotice: document.getElementById("configNotice"),
+      listHelper: document.getElementById("listHelper"),
+    };
+
+    let supabaseClient = null;
+    let isConfigured = false;
+
+    function escapeHtml(value) {
+      return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function setFeedback(type, message) {
+      elements.feedback.style.display = "block";
+      elements.feedback.className = "notice " + type;
+      elements.feedback.textContent = message;
+    }
+
+    function clearFeedback() {
+      elements.feedback.style.display = "none";
+      elements.feedback.textContent = "";
+      elements.feedback.className = "notice info";
+    }
+
+    function setConnectionState(label) {
+      elements.connectionState.textContent = label;
+    }
+
+    function updateConfigNotice(message, type) {
+      elements.configNotice.className = "notice " + type;
+      elements.configNotice.textContent = message;
+    }
+
+    function formatTime(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) {
+        return "방금 전";
+      }
+
+      return new Intl.DateTimeFormat("ko-KR", {
+        dateStyle: "medium",
+        timeStyle: "short",
+      }).format(date);
+    }
+
+    function renderMessages(rows) {
+      elements.messageCount.textContent = String(rows.length);
+
+      if (!rows.length) {
+        elements.guestbookList.innerHTML = '<div class="empty">첫 번째 팀원 모집 메시지를 남겨 보세요.</div>';
+        return;
+      }
+
+      elements.guestbookList.innerHTML = rows
+        .map((row) => {
+          const safeName = escapeHtml(row.name || "익명");
+          const safeMessage = escapeHtml(row.message || "");
+          const safeTime = escapeHtml(formatTime(row.created_at));
+
+          return (
+            '<article class="message-item">' +
+              '<div class="message-head">' +
+                '<h4 class="message-name">' + safeName + '</h4>' +
+                '<span class="message-time">' + safeTime + '</span>' +
+              '</div>' +
+              '<p class="message-body">' + safeMessage + '</p>' +
+            '</article>'
+          );
+        })
+        .join("");
+    }
+
+    function getStoredConfig() {
+      return {
+        url: localStorage.getItem(STORAGE_KEYS.url) || "",
+        key: localStorage.getItem(STORAGE_KEYS.key) || "",
+      };
+    }
+
+    function bootstrapClient() {
+      const { url, key } = getStoredConfig();
+
+      elements.supabaseUrlInput.value = url;
+      elements.supabaseKeyInput.value = key;
+
+      if (!url || !key) {
+        isConfigured = false;
+        supabaseClient = null;
+        setConnectionState("미설정");
+        elements.listHelper.textContent = "연결 정보를 먼저 저장하면 목록을 불러올 수 있습니다.";
+        updateConfigNotice(
+          "Supabase URL과 퍼블리셔블 키가 아직 설정되지 않았습니다. 아래 입력란에 한 번만 저장해 주세요.",
+          "info"
+        );
+        renderMessages([]);
+        return;
+      }
+
+      try {
+        supabaseClient = window.supabase.createClient(url, key);
+        isConfigured = true;
+        setConnectionState("연결됨");
+        updateConfigNotice(
+          "연결 정보가 저장되어 있습니다. 방명록 메시지를 읽고 쓸 준비가 되었습니다.",
+          "success"
+        );
+        elements.listHelper.textContent = "최신 메시지부터 순서대로 표시합니다.";
+      } catch (error) {
+        isConfigured = false;
+        supabaseClient = null;
+        setConnectionState("오류");
+        updateConfigNotice("Supabase 클라이언트 생성에 실패했습니다. URL과 키 형식을 다시 확인해 주세요.", "error");
+      }
+    }
+
+    async function loadMessages() {
+      if (!isConfigured || !supabaseClient) {
+        clearFeedback();
+        return;
+      }
+
+      setConnectionState("조회 중");
+      elements.listHelper.textContent = "메시지 목록을 불러오는 중입니다.";
+
+      const { data, error } = await supabaseClient
+        .from("carrymate_guestbook")
+        .select("id, name, message, created_at")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        setConnectionState("실패");
+        elements.listHelper.textContent = "메시지 목록을 불러오지 못했습니다.";
+        setFeedback("error", "목록 조회 실패: " + error.message);
+        return;
+      }
+
+      clearFeedback();
+      renderMessages(data || []);
+      setConnectionState("정상");
+      elements.listHelper.textContent = "최신 메시지 " + (data ? data.length : 0) + "개를 표시하고 있습니다.";
+    }
+
+    async function submitMessage(event) {
+      event.preventDefault();
+
+      if (!isConfigured || !supabaseClient) {
+        setFeedback("error", "먼저 Supabase URL과 퍼블리셔블 키를 저장해 주세요.");
+        return;
+      }
+
+      const name = elements.nameInput.value.trim();
+      const message = elements.messageInput.value.trim();
+
+      if (!name || !message) {
+        setFeedback("error", "이름과 메시지를 모두 입력해 주세요.");
+        return;
+      }
+
+      elements.submitButton.disabled = true;
+      setFeedback("info", "메시지를 저장하는 중입니다.");
+
+      const { error } = await supabaseClient
+        .from("carrymate_guestbook")
+        .insert([{ name, message }]);
+
+      elements.submitButton.disabled = false;
+
+      if (error) {
+        setFeedback("error", "저장 실패: " + error.message);
+        return;
+      }
+
+      elements.guestbookForm.reset();
+      setFeedback("success", "방명록이 등록되었습니다.");
+      await loadMessages();
+    }
+
+    function saveConfig() {
+      const url = elements.supabaseUrlInput.value.trim();
+      const key = elements.supabaseKeyInput.value.trim();
+
+      if (!url || !key) {
+        setFeedback("error", "URL과 키를 모두 입력해 주세요.");
+        return;
+      }
+
+      localStorage.setItem(STORAGE_KEYS.url, url);
+      localStorage.setItem(STORAGE_KEYS.key, key);
+      bootstrapClient();
+      setFeedback("success", "연결 정보가 저장되었습니다.");
+      loadMessages();
+    }
+
+    elements.saveConfigButton.addEventListener("click", saveConfig);
+    elements.refreshButton.addEventListener("click", loadMessages);
+    elements.guestbookForm.addEventListener("submit", submitMessage);
+
+    bootstrapClient();
+    loadMessages();
+  </script>
+</body>
+</html>
