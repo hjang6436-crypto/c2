@@ -382,3 +382,7 @@ button { -webkit-tap-highlight-color: transparent; }
     4px 4px 9px rgba(153, 162, 187, 0.18),
     -4px -4px 9px rgba(255, 255, 255, 0.52) !important;
 }
+
+body {
+  background: #dbeafe !important;
+}
