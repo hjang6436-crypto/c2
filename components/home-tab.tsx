@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ConfirmedMeeting, Task } from "@/types/carrymate123";
+import { ConfirmedMeeting, Task } from "@/types/carrymate";
 
 type Summary = {
   totalCount: number;
